@@ -5,17 +5,11 @@ public class EHA {
 
     public static void main(String[] args) {
         List<String> bc = new ArrayList<>();
-        bc.add("b&d&e>f");
-        bc.add("d&g>a");
-        bc.add("c&f>a");
-        bc.add("b>x");
-        bc.add("d>e");
-        bc.add("x&a>h");
-        bc.add("c>d");
-        bc.add("x&c>a");
-        bc.add("x&b>d");
+        bc.add("caballo-x&rapido-x>candidatocompeticion-x");
+        bc.add("caballo-x&padre-x,y&rapido-y>rapido-x");
+        for (Regla r : convertir(bc))
+            System.out.println(r.toString());
 
-        List<String> bh = new ArrayList<>();
         Map<String, Integer> valores = new HashMap<>();
         valores.put("h", 100);
         valores.put("a", 90);
@@ -27,10 +21,24 @@ public class EHA {
         valores.put("c", 50);
         valores.put("b", 50);
 
-//        bh.add("b");
-        bh.add("c");
-//        bh.add("g");
-        //String meta = "h";
+        BaseHechos bh = new BaseHechos();
+        List<String> dominio1 = new ArrayList<>();
+        dominio1.add("cometa");
+        dominio1.add("veloz");
+        dominio1.add("bronco");
+        dominio1.add("rayo");
+        //bh.agregarDominios(dominio1);
+        bh.agregarHechos("caballo-cometa");
+        bh.agregarHechos("caballo-bronco");
+        bh.agregarHechos("caballo-veloz");
+        bh.agregarHechos("caballo-rayo");
+        bh.agregarHechos("padre-cometa,veloz");
+        bh.agregarHechos("padre-cometa,bronco");
+        bh.agregarHechos("padre-veloz,rayo");
+        bh.agregarHechos("rapido-bronco");
+        bh.agregarHechos("rapido-rayo");
+
+
         List<String> preguntas = preguntar(bc);
         int R;
         String nuevosHechos;
@@ -38,32 +46,49 @@ public class EHA {
         conjuntoConflicto.add(extraeRegla(bc));
 
         while (!noVacio(bc) && !noVacio(conjuntoConflicto)) {
-            conjuntoConflicto = equiparar(antecedente(bc), bh);
+            conjuntoConflicto = equiparar(antecedente(bc), bh.getHechos());
             if (!noVacio(conjuntoConflicto)) {
                 R = resolver(conjuntoConflicto);
-                nuevosHechos = aplicar(R, bc, bh, preguntas);
+                nuevosHechos = aplicar(R, bc, bh.getHechos(), preguntas);
                 if (!nuevosHechos.isEmpty()) {
                     System.out.printf("Submeta: '%s'\n", nuevosHechos);
-                    actualizar(bh, nuevosHechos);
+                    actualizar(bh.getHechos(), nuevosHechos);
                     System.out.println(bh.toString());
-                    conjuntoConflicto = equiparar(antecedente(bc), bh);
+                    conjuntoConflicto = equiparar(antecedente(bc), bh.getHechos());
                 }
             }
         }
-        int max = 0;
-        for (String string : bh) {
+        /*int max = 0;
+        for (String string : bh.getHechos()) {
             if (valores.get(string) > max) {
                 max = valores.get(string);
             }
         }
         System.out.printf("Resultado: ");
-        for (String str : bh) {
+        for (String str : bh.getHechos()) {
             if (valores.get(str) == max) {
                 System.out.println(str);
             }
-        }
+        }*/
     }
+    static List<Regla> convertir(List<String> bc){
+        List<Regla> reglas = new ArrayList<>();
+        for (String s: bc) {
+            String[] revision = s.split(">");
+            String[] antecedentes = revision[0].split("&");
+            List<Predicado> p = new ArrayList<>();
+            for (String a:antecedentes) {
+                String[] predicados = a.split("-");
+                String[] variables = predicados[1].split(",");
+                p.add(new Predicado(predicados[0], Arrays.asList(variables)));
+            }
+            String[] aux = revision[1].split("-");
+            String[] aux1 = aux[1].split(",");
+            reglas.add(new Regla(p,new Predicado(aux[0],Arrays.asList(aux1))));
+        }
 
+        return reglas;
+    }
     static List<String> preguntar(List<String> bc) {
         Set<String> antecedentes = new HashSet<>();
         Set<String> consecuentes = new HashSet<>();
