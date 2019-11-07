@@ -1,14 +1,11 @@
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class BaseHechos {
     Map<String,List<String>> dominios;
     List<List<String>> actuales;
-    List<String> hechos;
+    List<Predicado> hechos;
 
-    public BaseHechos(Map<String,List<String>> dominios, List<List<String>> actuales, List<String> hechos) {
+    public BaseHechos(Map<String,List<String>> dominios, List<List<String>> actuales, List<Predicado> hechos) {
         this.dominios = dominios;
         this.actuales = actuales;
         this.hechos = hechos;
@@ -36,11 +33,13 @@ public class BaseHechos {
         this.actuales.add(actuales);
     }
 
-    public List<String> getHechos() {
+    public List<Predicado> getHechos() {
         return hechos;
     }
 
     public void agregarHechos(String hechos) {
-        this.hechos.add(hechos);
+        String[] aux = hechos.split("-");
+        String[] aux1 = aux[1].split(",");
+        this.hechos.add(new Predicado(aux[0], Arrays.asList(aux1)));
     }
 }
