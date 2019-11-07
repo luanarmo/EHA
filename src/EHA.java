@@ -6,19 +6,50 @@ public class EHA {
     public static void main(String[] args) {
         List<String> bc = new ArrayList<>();
         List<Regla> reglas = new ArrayList<>();
-        bc.add("caballo-x&padre-x,y&rapido-y>rapido-x");
         bc.add("caballo-x&rapido-x>candidatocompeticion-x");
+        bc.add("caballo-x&padre-x,y&rapido-y>rapido-x");
+
+//        bc.add("tiene-a,b,c,d>activa-PhopPhoq");
+//        bc.add("tiene-a,b>activa-x");
+//        bc.add("tiene-e&tiene-y>activa-y,e");
+//        bc.add("activa-y,e&activa-y,e>activa_isl-spi2,y");
+//        bc.add("activa-PhopPhoq>reprime_isl-spi2,PhopPhoq");
+//        bc.add("activa-PhopPhoq>reprime_isl-spi1,PhopPhoq");
+
         for (Regla r : convertir(bc))
             reglas.add(r);
 
         BaseHechos bh = new BaseHechos();
         List<String> dominio1 = new ArrayList<>();
+        List<String> dominio2 = new ArrayList<>();
+
         dominio1.add("cometa");
         dominio1.add("veloz");
         dominio1.add("bronco");
         dominio1.add("rayo");
+//
+//        dominio1.add("bajoOxigeno");
+//        dominio1.add("altaOsmoralidad");
+//        dominio1.add("inflamacion");
+//        dominio1.add("invasion");
+//        dominio1.add("estresOxi");
+//        dominio1.add("bajaOsmolaridad");
+//        dominio1.add("bajoCalcio");
+//        dominio1.add("phAcido");
+
+//        dominio2.add("ssef");
+//        dominio2.add("sseg");
+//        dominio2.add("ssraSsrb");
+
+//        bh.agregarDominios("a", dominio1);
+//        bh.agregarDominios("b", dominio1);
+//        bh.agregarDominios("c", dominio1);
+//        bh.agregarDominios("d", dominio1);
+//        bh.agregarDominios("e", dominio1);
+//        bh.agregarDominios("f", dominio1);
         bh.agregarDominios("x", dominio1);
         bh.agregarDominios("y", dominio1);
+
         bh.agregarHechos("caballo-cometa");
         bh.agregarHechos("caballo-bronco");
         bh.agregarHechos("caballo-veloz");
@@ -29,30 +60,42 @@ public class EHA {
         bh.agregarHechos("rapido-bronco");
         bh.agregarHechos("rapido-rayo");
 
+//        bh.agregarHechos("tiene-estresOxi,bajaOsmolaridad,bajoCalcio,phAcido");
+//        bh.agregarHechos("tiene-bajoOxigeno,altaOsmolaridad");
+//        bh.agregarHechos("invasion-phAcido");
+//        bh.agregarHechos("activa-ssef,estresOxi");
+//        bh.agregarHechos("tiene-ssef");
+//        bh.agregarHechos("tiene-phAcido");
+
 
 //        List<String> preguntas = preguntar(bc);
         int R;
         List<Predicado> nuevosHechos;
         List<Integer> conjuntoConflicto = new ArrayList<>();
-//        conjuntoConflicto.add(extraeRegla(bc));
+        conjuntoConflicto.add(extraeRegla(reglas));
 
-//        while (!noVacio(bc) && !noVacio(conjuntoConflicto)) {
-        conjuntoConflicto = equiparar(antecedente(reglas), bh);
-        //System.out.println(conjuntoConflicto.toString());
+        while (!noVacio(bh.getHechos()) && !noVacio(conjuntoConflicto)) {
+            conjuntoConflicto = equiparar(antecedente(reglas), bh, reglas);
+            System.out.println(conjuntoConflicto.toString());
 
-//            if (!noVacio(conjuntoConflicto)) {
-        R = resolver(conjuntoConflicto);
-        System.out.println(R);
-        nuevosHechos = aplicar(R, reglas, bh, new ArrayList<>());
-//                System.out.println(nuevosHechos.toString());
-//                if (!nuevosHechos.isEmpty()) {
+            if (!noVacio(conjuntoConflicto)) {
+                R = resolver(conjuntoConflicto, reglas);
+                System.out.println(R);
+//                if (R < reglas.size()) {
+                nuevosHechos = aplicar(R, reglas, bh, new ArrayList<>());
+//                    System.out.println(nuevosHechos.toString());
+                System.out.println(nuevosHechos.toString());
+                if (!nuevosHechos.isEmpty()) {
 //                    System.out.printf("Submeta: '%s'\n", nuevosHechos);
-//                    actualizar(bh.getHechos(), nuevosHechos);
-//                    System.out.println(bh.toString());
+                    actualizar(bh, nuevosHechos);
 //                    conjuntoConflicto = equiparar(antecedente(bc), bh.getHechos());
+                }
 //                }
-//            }
-//        }
+            }
+        }
+        for (Predicado pre : bh.getHechos()) {
+            System.out.println(pre.toString());
+        }
         /*int max = 0;
         for (String string : bh.getHechos()) {
             if (valores.get(string) > max) {
@@ -110,7 +153,7 @@ public class EHA {
         return true;
     }
 
-    static List<Integer> equiparar(List<List<Predicado>> antecedente, BaseHechos bh) {
+    static List<Integer> equiparar(List<List<Predicado>> antecedente, BaseHechos bh, List<Regla> reglas) {
         boolean add;
         int cont = -1;
         List<Integer> list = new ArrayList<>();
@@ -136,7 +179,8 @@ public class EHA {
                     }
                 }
             cont++;
-            if (add)
+            Regla regla = reglas.get(cont);
+            if (add && regla.getContador() < 3)
                 list.add(cont);
         }
         return list;
@@ -151,21 +195,34 @@ public class EHA {
         return antecedentes;
     }
 
-    static String extraeRegla(List<String> bc) {
-        return bc.get(0);
+    static Integer extraeRegla(List<Regla> bc) {
+        if (bc.isEmpty())
+            return null;
+        else
+            return 0;
     }
 
     static boolean noContenida(String meta, List<String> bh) {
         return !bh.contains(meta);
     }
 
-    static boolean noVacio(List<String> ConjuntoConflicto) {
+    static boolean noVacio(List ConjuntoConflicto) {
         return ConjuntoConflicto.size() == 0;
     }
 
-    static int resolver(List<Integer> ConjuntoConflicto) {
-
-        int conjunto = ConjuntoConflicto.get(0);
+    static int resolver(List<Integer> ConjuntoConflicto, List<Regla> reglas) {
+        int i = 0;
+        int conjunto;
+        Regla regla;
+        do {
+            try {
+                conjunto = ConjuntoConflicto.get(i);
+            } catch (IndexOutOfBoundsException e) {
+                return reglas.size() + 1;
+            }
+            regla = reglas.get(conjunto);
+            i++;
+        } while (regla.getContador() >= 3 && i <= reglas.size());
         //ConjuntoConflicto.remove(0);
         //String[] aux2 = conjunto.split("-");
         return conjunto;
@@ -175,12 +232,12 @@ public class EHA {
         Map<String, List<String>> variables = new HashMap<>();
         Regla regla = bc.get(R);
         regla.aumentarContador();
-        System.out.println(regla.toString());
+//        System.out.println(regla.toString());
         List<String> valores = null;
         List<Predicado> predicados = new ArrayList<>();
         for (Predicado predicado : regla.getAntecedentes()) {
             List<Predicado> coincidencias = igualar(predicado, bh);
-            System.out.println(coincidencias.toString());
+//            System.out.println(coincidencias.toString());
             if (coincidencias.size() > 0) {
                 for (int i = 0; i < predicado.getVariables().size(); i++) {
                     if (variables.get(predicado.getVariables().get(i)) == null) {
@@ -201,11 +258,64 @@ public class EHA {
                 }
             }
         }
-        System.out.println(variables);
-        for(String variable:regla.getConsecuente().getVariables()) {
-            predicados.add(new Predicado());
+//        System.out.println(variables);
+        int foo = 1;
+        for (int i = 0; i < regla.getConsecuente().getVariables().size(); i++) {
+            try {
+                System.out.println(variables.get(regla.getConsecuente().getVariables().get(i)).size());
+                foo *= variables.get(regla.getConsecuente().getVariables().get(i)).size();
+            } catch (NullPointerException e) {
+                if (bh.getDominios().keySet().contains(regla.getConsecuente().getVariables().get(i)))
+//                    continue;
+                    return new ArrayList<>();
+            }
         }
-        return new ArrayList<>();
+//        foo=1;
+
+//        System.out.println(foo);
+        List<List<String>> combinaciones = new ArrayList<>();
+        int exp = 0;
+        for (String variable : regla.getConsecuente().getVariables()) {
+            int n = (int) Math.pow(2, exp);
+            int apuntador = 0;
+            for (int i = 0; i < foo; i++) {
+//                System.out.println("----------------------");
+//                for (int j = 0; j < n; j++) {
+//                System.out.println(variables.get(variable).get(apuntador));
+                try {
+                    combinaciones.get(i).add(variables.get(variable).get(apuntador));
+                } catch (IndexOutOfBoundsException e) {
+                    combinaciones.add(new ArrayList<>());
+                    try {
+                        combinaciones.get(i).add(variables.get(variable).get(apuntador));
+                    } catch (NullPointerException f) {
+                        if (!bh.getDominios().keySet().contains(regla.getConsecuente().getVariables().get(i))) {
+                            combinaciones.get(i).add(regla.getConsecuente().getVariables().get(i));
+                        } else {
+                            return new ArrayList<>();
+                        }
+                    }
+                }
+                if ((i + 1) % n == 0) {
+                    System.out.println("Esta es la i " +i);
+                    System.out.println(regla.toString());
+                    System.out.println(foo);
+                    if (!bh.getDominios().keySet().contains(variables.get(regla.getConsecuente().getVariables()).get(i)))
+                        apuntador = 0;
+                    else {
+                        if (apuntador >= variables.get(variable).size() - 1)
+                            apuntador = 0;
+                        else
+                            apuntador++;
+                    }
+
+                }
+            }
+            exp++;
+        }
+        for (List<String> list : combinaciones)
+            predicados.add(new Predicado(regla.getConsecuente().getNombre(), list));
+        return predicados;
     }
 
     static List<Predicado> igualar(Predicado predicado, BaseHechos bh) {
@@ -230,7 +340,7 @@ public class EHA {
         return foo;
     }
 
-    static void actualizar(List<String> bh, String nuevosHechos) {
-        bh.add(nuevosHechos);
+    static void actualizar(BaseHechos bh, List<Predicado> nuevosHechos) {
+        bh.agregarHechos(nuevosHechos);
     }
 }

@@ -72,7 +72,8 @@
       <workItem from="1572497262546" duration="51000" />
       <workItem from="1572895955043" duration="5892000" />
       <workItem from="1572962351864" duration="3616000" />
-      <workItem from="1573060659381" duration="12317000" />
+      <workItem from="1573060659381" duration="15150000" />
+      <workItem from="1573134286463" duration="14691000" />
     </task>
     <servers />
   </component>
@@ -95,13 +96,10 @@
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
-        <line-breakpoint enabled="true" type="java-method">
+        <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/EHA.java</url>
-          <line>210</line>
-          <properties class="EHA" method="igualar">
-            <option name="EMULATED" value="true" />
-          </properties>
-          <option name="timeStamp" value="5" />
+          <line>262</line>
+          <option name="timeStamp" value="12" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
