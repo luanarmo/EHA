@@ -6,15 +6,15 @@ public class EHA {
     public static void main(String[] args) {
         List<String> bc = new ArrayList<>();
         List<Regla> reglas = new ArrayList<>();
-        bc.add("caballo-x&rapido-x>candidatocompeticion-x");
-        bc.add("caballo-x&padre-x,y&rapido-y>rapido-x");
+//        bc.add("caballo-x&rapido-x>candidatocompeticion-x");
+//        bc.add("caballo-x&padre-x,y&rapido-y>rapido-x");
 
-//        bc.add("tiene-a,b,c,d>activa-PhopPhoq");
-//        bc.add("tiene-a,b>activa-x");
-//        bc.add("tiene-e&tiene-y>activa-y,e");
-//        bc.add("activa-y,e&activa-y,e>activa_isl-spi2,y");
-//        bc.add("activa-PhopPhoq>reprime_isl-spi2,PhopPhoq");
-//        bc.add("activa-PhopPhoq>reprime_isl-spi1,PhopPhoq");
+        bc.add("activa-PhopPhoq>reprime_isl-spi1,PhopPhoq");
+        bc.add("activa-PhopPhoq>reprime_isl-spi2,PhopPhoq");
+        bc.add("tiene-a,b,c,d>activa-PhopPhoq");
+        bc.add("tiene-a,b>activa-x");
+        bc.add("tiene-e&tiene-y>activa-y,e");
+        bc.add("activa-y,e&activa-y,e>activa_isl-spi2,y");
 
         for (Regla r : convertir(bc))
             reglas.add(r);
@@ -23,49 +23,49 @@ public class EHA {
         List<String> dominio1 = new ArrayList<>();
         List<String> dominio2 = new ArrayList<>();
 
-        dominio1.add("cometa");
-        dominio1.add("veloz");
-        dominio1.add("bronco");
-        dominio1.add("rayo");
-//
-//        dominio1.add("bajoOxigeno");
-//        dominio1.add("altaOsmoralidad");
-//        dominio1.add("inflamacion");
-//        dominio1.add("invasion");
-//        dominio1.add("estresOxi");
-//        dominio1.add("bajaOsmolaridad");
-//        dominio1.add("bajoCalcio");
-//        dominio1.add("phAcido");
+//        dominio1.add("cometa");
+//        dominio1.add("veloz");
+//        dominio1.add("bronco");
+//        dominio1.add("rayo");
 
-//        dominio2.add("ssef");
-//        dominio2.add("sseg");
-//        dominio2.add("ssraSsrb");
+        dominio1.add("bajoOxigeno");
+        dominio1.add("altaOsmoralidad");
+        dominio1.add("inflamacion");
+        dominio1.add("invasion");
+        dominio1.add("estresOxi");
+        dominio1.add("bajaOsmolaridad");
+        dominio1.add("bajoCalcio");
+        dominio1.add("phAcido");
 
-//        bh.agregarDominios("a", dominio1);
-//        bh.agregarDominios("b", dominio1);
-//        bh.agregarDominios("c", dominio1);
-//        bh.agregarDominios("d", dominio1);
-//        bh.agregarDominios("e", dominio1);
-//        bh.agregarDominios("f", dominio1);
-        bh.agregarDominios("x", dominio1);
-        bh.agregarDominios("y", dominio1);
+        dominio2.add("ssef");
+        dominio2.add("sseg");
+        dominio2.add("ssraSsrb");
 
-        bh.agregarHechos("caballo-cometa");
-        bh.agregarHechos("caballo-bronco");
-        bh.agregarHechos("caballo-veloz");
-        bh.agregarHechos("caballo-rayo");
-        bh.agregarHechos("padre-cometa,veloz");
-        bh.agregarHechos("padre-cometa,bronco");
-        bh.agregarHechos("padre-veloz,rayo");
-        bh.agregarHechos("rapido-bronco");
-        bh.agregarHechos("rapido-rayo");
+        bh.agregarDominios("a", dominio1);
+        bh.agregarDominios("b", dominio1);
+        bh.agregarDominios("c", dominio1);
+        bh.agregarDominios("d", dominio1);
+        bh.agregarDominios("e", dominio1);
+        bh.agregarDominios("f", dominio1);
+        bh.agregarDominios("y", dominio2);
+        bh.agregarDominios("x", dominio2);
 
-//        bh.agregarHechos("tiene-estresOxi,bajaOsmolaridad,bajoCalcio,phAcido");
-//        bh.agregarHechos("tiene-bajoOxigeno,altaOsmolaridad");
-//        bh.agregarHechos("invasion-phAcido");
-//        bh.agregarHechos("activa-ssef,estresOxi");
-//        bh.agregarHechos("tiene-ssef");
-//        bh.agregarHechos("tiene-phAcido");
+//        bh.agregarHechos("caballo-cometa");
+//        bh.agregarHechos("caballo-bronco");
+//        bh.agregarHechos("caballo-veloz");
+//        bh.agregarHechos("caballo-rayo");
+//        bh.agregarHechos("padre-cometa,veloz");
+//        bh.agregarHechos("padre-cometa,bronco");
+//        bh.agregarHechos("padre-veloz,rayo");
+//        bh.agregarHechos("rapido-bronco");
+//        bh.agregarHechos("rapido-rayo");
+
+        bh.agregarHechos("tiene-estresOxi,bajaOsmolaridad,bajoCalcio,phAcido");
+        bh.agregarHechos("tiene-bajoOxigeno,altaOsmolaridad");
+        bh.agregarHechos("invasion-phAcido");
+        bh.agregarHechos("activa-ssef,estresOxi");
+        bh.agregarHechos("tiene-ssef");
+        bh.agregarHechos("tiene-phAcido");
 
 
 //        List<String> preguntas = preguntar(bc);
@@ -83,8 +83,6 @@ public class EHA {
                 System.out.println(R);
 //                if (R < reglas.size()) {
                 nuevosHechos = aplicar(R, reglas, bh, new ArrayList<>());
-//                    System.out.println(nuevosHechos.toString());
-                System.out.println(nuevosHechos.toString());
                 if (!nuevosHechos.isEmpty()) {
 //                    System.out.printf("Submeta: '%s'\n", nuevosHechos);
                     actualizar(bh, nuevosHechos);
@@ -262,7 +260,6 @@ public class EHA {
         int foo = 1;
         for (int i = 0; i < regla.getConsecuente().getVariables().size(); i++) {
             try {
-                System.out.println(variables.get(regla.getConsecuente().getVariables().get(i)).size());
                 foo *= variables.get(regla.getConsecuente().getVariables().get(i)).size();
             } catch (NullPointerException e) {
                 if (bh.getDominios().keySet().contains(regla.getConsecuente().getVariables().get(i)))
@@ -279,9 +276,6 @@ public class EHA {
             int n = (int) Math.pow(2, exp);
             int apuntador = 0;
             for (int i = 0; i < foo; i++) {
-//                System.out.println("----------------------");
-//                for (int j = 0; j < n; j++) {
-//                System.out.println(variables.get(variable).get(apuntador));
                 try {
                     combinaciones.get(i).add(variables.get(variable).get(apuntador));
                 } catch (IndexOutOfBoundsException e) {
@@ -295,12 +289,15 @@ public class EHA {
                             return new ArrayList<>();
                         }
                     }
+                } catch (NullPointerException e) {
+                    if (!bh.getDominios().keySet().contains(regla.getConsecuente().getVariables().get(i))) {
+                        combinaciones.get(i).add(regla.getConsecuente().getVariables().get(i));
+                    } else {
+                        return new ArrayList<>();
+                    }
                 }
                 if ((i + 1) % n == 0) {
-                    System.out.println("Esta es la i " +i);
-                    System.out.println(regla.toString());
-                    System.out.println(foo);
-                    if (!bh.getDominios().keySet().contains(variables.get(regla.getConsecuente().getVariables()).get(i)))
+                    if (!bh.getDominios().keySet().contains(variable))
                         apuntador = 0;
                     else {
                         if (apuntador >= variables.get(variable).size() - 1)
